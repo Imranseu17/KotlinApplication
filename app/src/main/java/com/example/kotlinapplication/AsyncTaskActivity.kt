@@ -7,6 +7,9 @@ import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
+import kotlinx.android.synthetic.main.activity_main.*
 
 class AsyncTaskActivity : AppCompatActivity() {
 
@@ -16,6 +19,7 @@ class AsyncTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_async_task)
         context = this
+        getQuestions().execute()
     }
 
     internal inner class getQuestions : AsyncTask<Void,Void,String>(){
@@ -24,12 +28,30 @@ class AsyncTaskActivity : AppCompatActivity() {
         var  hasIntent = false
 
         override fun doInBackground(vararg params: Void?): String {
-            
+           if(isNetworkAvailable()) {
+
+               hasIntent = true
+               val client = OkHttpClient()
+               val url = "https://script.googleusercontent.com/marcos/echo?user_content_key=1tgBN"
+               val request = Request.Builder.url(url).build()
+               val response = client.newCall(request).execute()
+               return response.body()?.string().toString()
+           }
+            else{
+
+               return ""
+           }
         }
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             progressDialog.dismiss()
+
+            if(hasIntent){
+                tv_result.text = result
+            }
+            else
+                tv_result.text = "No Internet"
         }
 
         override fun onPreExecute() {
