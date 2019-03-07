@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(Intent(this, RecyclerActivity::class.java))
 
+        }
+
 
             button.setOnLongClickListener {
 
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                 textView.ellipsize = TextUtils.TruncateAt.MARQUEE
                 textView.marqueeRepeatLimit = -1
                 textView.isSelected = true
+                startActivity(Intent(this, FragmentActivity::class.java))
                 true
             }
 
@@ -125,7 +128,6 @@ class MainActivity : AppCompatActivity() {
             })
 
 
-        }
 
     }
 }
